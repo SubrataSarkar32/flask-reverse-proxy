@@ -1,0 +1,4 @@
+"192.168.1.101"->"http://localhost:5000"
+"manga.private"->"http://localhost:5000"
+"example2.com"->"http://localhost:8000"
+"example3.com"->"http://unix:/home/subrata32/stream-video-browser/hsecure3.sock"
