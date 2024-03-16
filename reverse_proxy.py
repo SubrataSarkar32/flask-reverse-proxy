@@ -18,7 +18,7 @@ def bad_gateway(e):
   return render_template('502.html'), 502
 
 
-@app.route('/')
+@app.route('/check')
 def index():
     print(str(urlparse(request.base_url).hostname))
     return 'Flask is running!'
@@ -31,19 +31,21 @@ def proxy(path):
     if SITE_NAMEY in SITE_NAME_DICT:
         SITE_NAME = SITE_NAME_DICT[SITE_NAMEY]
         if request.method=='GET':
-            resp = requests.get(f'{SITE_NAME}{path}')
+            print(f'{SITE_NAME}/{path}')
+            resp = requests.get(f'{SITE_NAME}/{path}')
             excluded_headers = ['content-encoding', 'content-length', 'transfer-encoding', 'connection']
             headers = [(name, value) for (name, value) in  resp.raw.headers.items() if name.lower() not in excluded_headers]
             response = Response(resp.content, resp.status_code, headers)
             return response
         elif request.method=='POST':
-            resp = requests.post(f'{SITE_NAME}{path}',json=request.get_json())
+            print(f'{SITE_NAME}/{path}')
+            resp = requests.post(f'{SITE_NAME}/{path}',json=request.get_json())
             excluded_headers = ['content-encoding', 'content-length', 'transfer-encoding', 'connection']
             headers = [(name, value) for (name, value) in resp.raw.headers.items() if name.lower() not in excluded_headers]
             response = Response(resp.content, resp.status_code, headers)
             return response
         elif request.method=='DELETE':
-            resp = requests.delete(f'{SITE_NAME}{path}').content
+            resp = requests.delete(f'{SITE_NAME}/{path}').content
             response = Response(resp.content, resp.status_code, headers)
             return response
     else:
@@ -52,4 +54,4 @@ def proxy(path):
 
 
 if __name__ == '__main__':
-    app.run(debug=False, port=80)
+    app.run("0.0.0.0", debug=False, port=80)
