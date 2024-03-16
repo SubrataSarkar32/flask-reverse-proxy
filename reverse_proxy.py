@@ -56,27 +56,30 @@ def proxy1():
     global SITE_NAME_DICT
     print(SITE_NAME_DICT)
     SITE_NAMEY = get_hostname_str(k=request.base_url)
-    if SITE_NAMEY in SITE_NAME_DICT:
-        SITE_NAME = SITE_NAME_DICT[SITE_NAMEY]
-        if request.method == 'GET':
-            print(f'{SITE_NAME}/')
-            resp = requests.get(f'{SITE_NAME}/')
-            excluded_headers = ['content-encoding', 'content-length', 'transfer-encoding', 'connection']
-            headers = [(name, value) for (name, value) in resp.raw.headers.items() if name.lower() not in excluded_headers]
-            response = Response(resp.content, resp.status_code, headers)
-            return response
-        elif request.method == 'POST':
-            print(f'{SITE_NAME}/')
-            resp = requests.post(f'{SITE_NAME}/', json=request.get_json())
-            excluded_headers = ['content-encoding', 'content-length', 'transfer-encoding', 'connection']
-            headers = [(name, value) for (name, value) in resp.raw.headers.items() if name.lower() not in excluded_headers]
-            response = Response(resp.content, resp.status_code, headers)
-            return response
-        elif request.method == 'DELETE':
-            resp = requests.delete(f'{SITE_NAME}/').content
-            response = Response(resp.content, resp.status_code, headers)
-            return response
-    else:
+    try:
+        if SITE_NAMEY in SITE_NAME_DICT:
+            SITE_NAME = SITE_NAME_DICT[SITE_NAMEY]
+            if request.method == 'GET':
+                print(f'{SITE_NAME}/')
+                resp = requests.get(f'{SITE_NAME}/')
+                excluded_headers = ['content-encoding', 'content-length', 'transfer-encoding', 'connection']
+                headers = [(name, value) for (name, value) in resp.raw.headers.items() if name.lower() not in excluded_headers]
+                response = Response(resp.content, resp.status_code, headers)
+                return response
+            elif request.method == 'POST':
+                print(f'{SITE_NAME}/')
+                resp = requests.post(f'{SITE_NAME}/', json=request.get_json())
+                excluded_headers = ['content-encoding', 'content-length', 'transfer-encoding', 'connection']
+                headers = [(name, value) for (name, value) in resp.raw.headers.items() if name.lower() not in excluded_headers]
+                response = Response(resp.content, resp.status_code, headers)
+                return response
+            elif request.method == 'DELETE':
+                resp = requests.delete(f'{SITE_NAME}/').content
+                response = Response(resp.content, resp.status_code, headers)
+                return response
+        else:
+            abort(502)
+    except requests.exceptions.RequestException as e:  # This is the correct syntax
         abort(502)
 
 
@@ -84,27 +87,30 @@ def proxy1():
 def proxy(path):
     global SITE_NAME_DICT
     SITE_NAMEY = get_hostname_str(k=request.base_url)
-    if SITE_NAMEY in SITE_NAME_DICT:
-        SITE_NAME = SITE_NAME_DICT[SITE_NAMEY]
-        if request.method == 'GET':
-            print(f'{SITE_NAME}/{path}')
-            resp = requests.get(f'{SITE_NAME}/{path}')
-            excluded_headers = ['content-encoding', 'content-length', 'transfer-encoding', 'connection']
-            headers = [(name, value) for (name, value) in resp.raw.headers.items() if name.lower() not in excluded_headers]
-            response = Response(resp.content, resp.status_code, headers)
-            return response
-        elif request.method == 'POST':
-            print(f'{SITE_NAME}/{path}')
-            resp = requests.post(f'{SITE_NAME}/{path}', json=request.get_json())
-            excluded_headers = ['content-encoding', 'content-length', 'transfer-encoding', 'connection']
-            headers = [(name, value) for (name, value) in resp.raw.headers.items() if name.lower() not in excluded_headers]
-            response = Response(resp.content, resp.status_code, headers)
-            return response
-        elif request.method == 'DELETE':
-            resp = requests.delete(f'{SITE_NAME}/{path}').content
-            response = Response(resp.content, resp.status_code, headers)
-            return response
-    else:
+    try:
+        if SITE_NAMEY in SITE_NAME_DICT:
+            SITE_NAME = SITE_NAME_DICT[SITE_NAMEY]
+            if request.method == 'GET':
+                print(f'{SITE_NAME}/{path}')
+                resp = requests.get(f'{SITE_NAME}/{path}')
+                excluded_headers = ['content-encoding', 'content-length', 'transfer-encoding', 'connection']
+                headers = [(name, value) for (name, value) in resp.raw.headers.items() if name.lower() not in excluded_headers]
+                response = Response(resp.content, resp.status_code, headers)
+                return response
+            elif request.method == 'POST':
+                print(f'{SITE_NAME}/{path}')
+                resp = requests.post(f'{SITE_NAME}/{path}', json=request.get_json())
+                excluded_headers = ['content-encoding', 'content-length', 'transfer-encoding', 'connection']
+                headers = [(name, value) for (name, value) in resp.raw.headers.items() if name.lower() not in excluded_headers]
+                response = Response(resp.content, resp.status_code, headers)
+                return response
+            elif request.method == 'DELETE':
+                resp = requests.delete(f'{SITE_NAME}/{path}').content
+                response = Response(resp.content, resp.status_code, headers)
+                return response
+        else:
+            abort(502)
+    except requests.exceptions.RequestException as e:  # This is the correct syntax
         abort(502)
 
 
